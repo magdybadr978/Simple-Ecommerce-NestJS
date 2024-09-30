@@ -14,7 +14,7 @@ export class Product {
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Vendor' })
   vendorId: Types.ObjectId;
 
-  readonly _id: mongoose.Schema.Types.ObjectId;
+  readonly _id?: mongoose.Schema.Types.ObjectId;
 }
 
 export const productSchema = SchemaFactory.createForClass(Product);
