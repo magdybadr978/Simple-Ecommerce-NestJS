@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 
 @Schema({ timestamps: true, discriminatorKey: 'role' })
-export class User {
+export class Person {
   @Prop({ type: String })
   name: string;
 
@@ -14,4 +14,4 @@ export class User {
 
   readonly _id: mongoose.Schema.Types.ObjectId;
 }
-export const userSchema = SchemaFactory.createForClass(User);
+export const personSchema = SchemaFactory.createForClass(Person);

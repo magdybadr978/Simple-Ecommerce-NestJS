@@ -1,14 +1,13 @@
 import { Module } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
-import { User, userSchema } from "src/models/common/user.schema";
-
+import { Person, personSchema } from "src/models/common/person.schema";
 import { Vendor, vendorSchema } from "src/models/vendor/vendor.schema";
 
 @Module({
   imports: [ MongooseModule.forFeature([
     {
-      name : User.name,
-      schema : userSchema,
+      name : Person.name,
+      schema : personSchema,
       discriminators : [{ name : Vendor.name , schema : vendorSchema}]
     }])],
     controllers : [],
