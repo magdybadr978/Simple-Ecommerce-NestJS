@@ -4,6 +4,7 @@ import { Person, personSchema } from 'src/models/common/person.schema';
 import { User, userSchema } from 'src/models/user/user.schema';
 import { UserController } from './user.controller';
 import { UserRepository } from 'src/models/user/user.repository';
+import { UserService } from './user.service';
 
 
 @Module({
@@ -14,8 +15,8 @@ import { UserRepository } from 'src/models/user/user.repository';
       discriminators : [{ name : User.name , schema : userSchema}]
     }
   ])],
-  controllers: [UserModule],
-  providers: [UserController,UserRepository],
-  exports : [UserController,UserRepository]
+  controllers: [UserController],
+  providers: [UserService,UserRepository],
+  exports : [UserService,UserRepository]
 })
 export class UserModule {}
