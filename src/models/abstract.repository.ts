@@ -17,7 +17,7 @@ export abstract class AbstractRepository<T> {
     return this.repo;
   }
 
-  public create(item: T): Promise<T> {
+  public create(item: T){ 
     const newDocument = new this.nModel(item);
     return newDocument.save();
   }
