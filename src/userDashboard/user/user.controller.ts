@@ -18,7 +18,10 @@ export class UserController {
     return this.userService.signUp(createUserDTO)
   }
 
-
+ @Post("signIn")
+ async signIn(@Body() signInDTO : {name : string , phone : string , password : string}){
+  return this.userService.signIn(signInDTO)
+ }
 
   @Post('add')
   async createUser(
