@@ -6,28 +6,22 @@ import { Types } from 'mongoose';
 export class CartController {
   constructor(private readonly cartService: CartService) {}
 
-  @Post('create/:userId')
+  @Post(':userId')
   async addToCart(
     @Param('userId') userId: string,
-    @Body("items") items: { productId: Types.ObjectId; quantity: number },
+    @Body() items: { productId: Types.ObjectId; quantity: number },
   ) {
+    
     
     return await this.cartService.addToCart(new Types.ObjectId(userId),items);
   }
 
-  @Get('get/:userId')
+  @Get(':userId')
   async getCart(@Param('userId') userId: string) {
     return this.cartService.getCartByUserId(new Types.ObjectId(userId));
   }
 
-  @Put('update/:userId')
-  async updateCart(
-    @Param('userId') userId: string,
-    @Body('items') items: { productId: Types.ObjectId; quantity: number }[],
-  ) {
-    return this.cartService.updateCart(new Types.ObjectId(userId), items);
-  }
-
+  
   @Delete(':userId/:productId')
   async removeItemFromCart(
     @Param('userId') userId: string,
