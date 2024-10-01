@@ -33,15 +33,6 @@ export class UserService {
       // return user details 
       return { user };
     }
-
-    // Create a new User
-    async createUser(createUserDTO: {
-      name: string,
-      phone: string,
-      password: string,
-    }){
-      return this.userRepository.create(createUserDTO);
-    }
   
     // Get all Users
     async getAllUsers() {
@@ -63,10 +54,14 @@ export class UserService {
       id : string,
       updateUserDTO : {name: string,phone: string,password: string}
     ) {
+      // find user
+      const user = await this.userRepository.getOne({_id : new Types.ObjectId(id)})
+      //if not found user
+      if(!user) throw new NotFoundException("User not found")
       // hash password
       const hashPassword = await bcrypt.hash(updateUserDTO.password,8);
       // wrapping data in update variable
-      const update = { ...updateUserDTO , hashPassword}
+      const update = { ...updateUserDTO , password :hashPassword}
       // return response  
       return this.userRepository.update({ _id: new Types.ObjectId(id) },update,{ new: true });
         
