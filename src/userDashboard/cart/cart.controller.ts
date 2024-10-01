@@ -12,7 +12,7 @@ export class CartController {
     @Body("items") items: { productId: Types.ObjectId; quantity: number },
   ) {
     
-    return this.cartService.addToCart(new Types.ObjectId(userId),items);
+    return await this.cartService.addToCart(new Types.ObjectId(userId),items);
   }
 
   @Get('get/:userId')
@@ -38,6 +38,6 @@ export class CartController {
 
   @Delete(':userId')
   async deleteCart(@Param('userId') userId: string) {
-    return this.cartService.deleteCart(new Types.ObjectId(userId));
+    return this.cartService.deleteCart(userId);
   }
 }
