@@ -9,33 +9,34 @@ import {
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { Types } from 'mongoose';
+import { CreateProductDTO, UpdateProductDTO } from './dto';
 
 
 @Controller('dashboard-vendor/product')
 export class productController {
   constructor(private readonly productService: ProductService) {}
 
-  @Post('add')
+  @Post()
   async createProduct(
-    @Body() createproductDTO: { name: string , description: string , vendorId : Types.ObjectId },
+    @Body() createproductDTO: CreateProductDTO,
   ) {
     return await this.productService.createProduct(createproductDTO);
   }
 
-  @Get('getAll')
+  @Get()
   async getAllProducts() {
     return await this.productService.getAllProducts();
   }
 
-  @Get('getSpecific/:id')
+  @Get(':id')
   async getProductById(@Param('id') id: string) {
     return await this.productService.getproductById(id);
   }
 
-  @Put('update/:id')
+  @Put(':id')
   async updateproduct(
     @Param('id') id: string,
-    @Body() updateproductDTO: { name: string , description: string },
+    @Body() updateproductDTO: UpdateProductDTO,
   ) {
     return this.productService.updateproduct(
       id,
@@ -43,7 +44,7 @@ export class productController {
     );
   }
 
-  @Delete('delete/:id')
+  @Delete(':id')
   async deleteproduct(@Param('id') id: string) {
     return await this.productService.deleteproduct(id);
   }
