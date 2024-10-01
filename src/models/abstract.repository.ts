@@ -36,7 +36,7 @@ export abstract class AbstractRepository<T> {
     params?: ProjectionType<T>,
     options?: QueryOptions<T>,
   ) {
-    return this.repo.findOne(query, params, options).lean().exec();
+    return this.repo.findOne(query, params, options);
   }
 
   public getById(id : string | Types.ObjectId ,params? :ProjectionType<T> , options? : QueryOptions<T>){
