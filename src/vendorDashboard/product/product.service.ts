@@ -1,7 +1,8 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { BadGatewayException, BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { Types } from "mongoose";
 import { ProductRepository } from "src/models/product/product.repository";
 import { Product } from "src/models/product/product.schema";
+import { CreateProductDTO, UpdateProductDTO } from "./dto";
 
 
 @Injectable()
@@ -9,9 +10,9 @@ export class ProductService {
   constructor(private readonly productRepository : ProductRepository) {}
 
   // create product
-  async createProduct(createProductDTO : {name : string , description : string , vendorId : Types.ObjectId}){
+  async createProduct(createProductDTO : CreateProductDTO){
       const product = await this.productRepository.create(createProductDTO);
-      if(!product) throw new NotFoundException("vendor not found or error")
+      if(!product) throw new BadGatewayException("failed to create product")
       return product;
   }
 
@@ -35,7 +36,7 @@ export class ProductService {
   // Update a product by id
   async updateproduct(
     id: string,
-    updateproductDTO: { name: string; description: String },
+    updateproductDTO: UpdateProductDTO,
   ) {
     return this.productRepository.update(
       { _id: new Types.ObjectId(id) },
