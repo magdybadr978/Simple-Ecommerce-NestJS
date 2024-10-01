@@ -17,6 +17,6 @@ import { UserService } from './user.service';
   ])],
   controllers: [UserController],
   providers: [UserService,UserRepository],
-  exports : [UserService,UserRepository]
+  exports : [UserService,UserRepository , MongooseModule]
 })
 export class UserModule {}
