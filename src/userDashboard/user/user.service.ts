@@ -3,7 +3,7 @@
 import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
 import { Types } from "mongoose";
 import { UserRepository } from "src/models/user/user.repository";
-import bcrypt from "bcryptjs"
+import * as bcrypt from "bcryptjs"
 @Injectable()
 export class UserService {
   constructor(private readonly userRepository : UserRepository) {}
@@ -63,11 +63,13 @@ export class UserService {
       id : string,
       updateUserDTO : {name: string,phone: string,password: string}
     ) {
-      return this.userRepository.update(
-        { _id: new Types.ObjectId(id) },
-        updateUserDTO,
-        { new: true },
-      );
+      // hash password
+      const hashPassword = await bcrypt.hash(updateUserDTO.password,8);
+      // wrapping data in update variable
+      const update = { ...updateUserDTO , hashPassword}
+      // return response  
+      return this.userRepository.update({ _id: new Types.ObjectId(id) },update,{ new: true });
+        
     }
   
     // Delete User data by Id
@@ -75,8 +77,8 @@ export class UserService {
       // use method delete 
       const user = await this.userRepository.delete({ _id: new Types.ObjectId(id) });
       // check if user deleted or not
-      if(user.deletedCount == 0) throw new NotFoundException("vendor not found")
+      if(user.deletedCount == 0) throw new NotFoundException("user not found")
       // send response
-      return {message : "Deleted vendor successfully"}
+      return {message : "Deleted user successfully"}
     }
 }

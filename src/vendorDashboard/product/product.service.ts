@@ -23,13 +23,13 @@ export class ProductService {
   }
 
   // Get a product by id
-  async getproductById(id: string): Promise<{ message: string }> {
+  async getproductById(id: string) {
     const product = await this.productRepository.getOne({
       _id: new Types.ObjectId(id),
     });
     if (!product) throw new NotFoundException('product not found');
 
-    return { message: `get product by this id : ${id}` };
+    return { product };
   }
 
   // Update a product by id
