@@ -4,6 +4,7 @@ import {
   Model,
   ProjectionType,
   QueryOptions,
+  Types,
 } from 'mongoose';
 
 export abstract class AbstractRepository<T> {
@@ -36,6 +37,10 @@ export abstract class AbstractRepository<T> {
     options?: QueryOptions<T>,
   ) {
     return this.repo.findOne(query, params, options).lean().exec();
+  }
+
+  public getById(id : string | Types.ObjectId ,params? :ProjectionType<T> , options? : QueryOptions<T>){
+    return this.repo.findById(id , params , options).lean().exec()
   }
 
   public update(query: FilterQuery<T>, item: any, params: QueryOptions) {
