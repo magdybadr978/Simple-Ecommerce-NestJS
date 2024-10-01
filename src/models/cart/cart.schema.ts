@@ -10,7 +10,7 @@ export class Cart{
 
   @Prop([{
     productId : {type : mongoose.Schema.Types.ObjectId , ref : "Product" ,required : true},
-    quantity : { type : Number , required : true, default : 0}
+    quantity : { type : Number , required : true, default : 1}
   }])
   items : { productId : Types.ObjectId , quantity : number}[]
 }
