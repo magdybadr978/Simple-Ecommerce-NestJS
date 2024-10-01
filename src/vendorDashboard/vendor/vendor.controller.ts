@@ -1,42 +1,35 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
 import { VendorService } from "./vendor.service";
+import { CreateVendorDTO, UpdateVendorDTO } from "./dto";
 
 
-@Controller('dashboard-vendor')
+@Controller('dashboard-vendor/vendor')
 export class VendorController{
   constructor(private readonly vendorService :VendorService) {}
 
-  @Post('add')
+  @Post()
   async createVendor(
     @Body()
-    createVendorDTO: {
-      name: string;
-      phone: string;
-      password: string;
-    },
+    createVendorDTO: CreateVendorDTO
   ) {
     return await this.vendorService.createVendor(createVendorDTO);
   }
 
-  @Get('getAll')
+  @Get()
   async getAllVendors() {
     return await this.vendorService.getAllVendors();
   }
 
-  @Get('getSpecific/:id')
+  @Get(':id')
   async getSpecificVendor(@Param('id') id: string) {
     return await this.vendorService.getVendorById(id);
   }
 
-  @Put('update/:id')
+  @Put(':id')
   async updateVendor(
     @Param('id') id: string,
     @Body()
-    updateVendorDTO: {
-      name: string;
-      phone: string;
-      password: string;
-    },
+    updateVendorDTO: UpdateVendorDTO
   ) {
     return this.vendorService.updatevendor(
       id,
@@ -44,7 +37,7 @@ export class VendorController{
     );
   }
 
-  @Delete('delete/:id')
+  @Delete(':id')
   async deleteVendor(@Param('id') id: string) {
     return await this.vendorService.deleteVendor(id);
   }
