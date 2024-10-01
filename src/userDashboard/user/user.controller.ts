@@ -23,18 +23,6 @@ export class UserController {
   return this.userService.signIn(signInDTO)
  }
 
-  @Post('add')
-  async createUser(
-    @Body()
-    createUserDTO: {
-      name: string;
-      phone: string;
-      password: string;
-    },
-  ) {
-    return await this.userService.createUser(createUserDTO);
-  }
-
   @Get('getAll')
   async getAllUsers() {
     return await this.userService.getAllUsers();
