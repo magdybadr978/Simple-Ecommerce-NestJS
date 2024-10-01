@@ -19,7 +19,7 @@ export class UserController {
   }
 
  @Post("signIn")
- async signIn(@Body() signInDTO : {name : string , phone : string , password : string}){
+ async signIn(@Body() signInDTO : { phone : string , password : string}){
   return this.userService.signIn(signInDTO)
  }
 
