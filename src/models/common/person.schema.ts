@@ -1,12 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 
-@Schema({ timestamps: true, discriminatorKey: 'role' })
+@Schema({ timestamps: true, discriminatorKey: 'role', collection: 'person' })
 export class Person {
   @Prop({ type: String })
   name: string;
 
-  @Prop({ type: String })
+  @Prop({ type: String, required: true, unique: true })
   phone: string;
 
   @Prop({ type: String })
