@@ -1,28 +1,29 @@
 import { Controller, Post, Get, Body, Param, Delete, Put } from '@nestjs/common';
-import { CartService } from './cart.service';
+import { CartService } from './cart.service'; 
 import { Types } from 'mongoose';
 
 @Controller('dashboard-user/cart')
 export class CartController {
   constructor(private readonly cartService: CartService) {}
 
-  @Post(':userId')
-  async createCart(
+  @Post('create/:userId')
+  async addToCart(
     @Param('userId') userId: string,
-    @Body('items') items: { product: Types.ObjectId; quantity: number }[],
+    @Body("items") items: { productId: Types.ObjectId; quantity: number },
   ) {
-    return this.cartService.createCart(new Types.ObjectId(userId), items);
+    
+    return this.cartService.addToCart(new Types.ObjectId(userId),items);
   }
 
-  @Get(':userId')
+  @Get('get/:userId')
   async getCart(@Param('userId') userId: string) {
     return this.cartService.getCartByUserId(new Types.ObjectId(userId));
   }
 
-  @Put(':userId')
+  @Put('update/:userId')
   async updateCart(
     @Param('userId') userId: string,
-    @Body('items') items: { product: Types.ObjectId; quantity: number }[],
+    @Body('items') items: { productId: Types.ObjectId; quantity: number }[],
   ) {
     return this.cartService.updateCart(new Types.ObjectId(userId), items);
   }
