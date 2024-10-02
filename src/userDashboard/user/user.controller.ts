@@ -8,40 +8,37 @@ import {
   Put,
 } from '@nestjs/common';
 import { UserService } from './user.service';
+import { CreateUserDTO, UpdateUserDTO } from './dto';
 
-@Controller('dashboard-user')
+@Controller('dashboard-user/user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post('signUp')
-  async signUp(@Body() createUserDTO :{ name : string ,phone : string , password : string}){
+  async signUp(@Body() createUserDTO : CreateUserDTO){
     return this.userService.signUp(createUserDTO)
   }
 
  @Post("signIn")
- async signIn(@Body() signInDTO : { phone : string , password : string}){
+ async signIn(@Body() signInDTO : CreateUserDTO){
   return this.userService.signIn(signInDTO)
  }
 
-  @Get('getAll')
+  @Get()
   async getAllUsers() {
     return await this.userService.getAllUsers();
   }
 
-  @Get('getSpecific/:id')
+  @Get(':id')
   async getSpecificUser(@Param('id') id: string) {
     return await this.userService.getUserById(id);
   }
 
-  @Put('update/:id')
+  @Put(':id')
   async updateUser(
     @Param('id') id: string,
     @Body()
-    updateUserDTO: {
-      name: string;
-      phone: string;
-      password: string;
-    },
+    updateUserDTO: UpdateUserDTO
   ) {
     return this.userService.updateUser(
       id,
@@ -49,7 +46,7 @@ export class UserController {
     );
   }
 
-  @Delete('delete/:id')
+  @Delete(':id')
   async deleteUser(@Param('id') id: string) {
     return await this.userService.deleteUser(id);
   }
