@@ -1,7 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Types } from 'mongoose';
+import { CreateResponse, DeleteResponse, GetOneResponse, UpdateResponse } from 'src/common/dto/response.dto';
 import { CartRepository } from 'src/models/cart/cart.repository';
-import { CartDocument } from 'src/models/cart/cart.schema';
+import { Cart, CartDocument } from 'src/models/cart/cart.schema';
 import { ProductRepository } from 'src/models/product/product.repository';
 import { UserRepository } from 'src/models/user/user.repository';
 
@@ -17,11 +18,12 @@ export class CartService {
   async addToCart(
     userId: Types.ObjectId,
     items: { productId: Types.ObjectId; quantity: number },
-  ) {
+  ):Promise<CreateResponse<Cart>> {
     // Destructure data from items
     const { productId, quantity } = items;
     // Check if user exists
     const user = await this.userRepository.getById(userId);
+    // if user not exist
     if (!user) throw new NotFoundException('User does not exist');
     // Check if product exists
     const product = await this.productRepositry.getById(productId);
@@ -30,8 +32,6 @@ export class CartService {
     if (!product) throw new NotFoundException('Product not found');
     // Get cart if it exists
     let cart = await this.cartRepository.getOne({ userId });
-    console.log({ cart });
-
     // If the cart does not exist, create a new one
     if (!cart) {
       cart = (await this.cartRepository.create({
@@ -54,26 +54,23 @@ export class CartService {
     }
 
     // Update the cart with the new or updated items
-    return this.cartRepository.update(
-      { _id: cart._id },
-      { items: cart.items },
-      { new: true },
-    );
+    const updatedCart = this.cartRepository.update({ _id: cart._id },{ items: cart.items },{ new: true }) as unknown as CartDocument;
+    return {success : true , data :updatedCart}
   }
 
   // Get the cart by user ID
-  async getCartByUserId(userId: Types.ObjectId) {
+  async getCartByUserId(userId: Types.ObjectId):Promise<GetOneResponse<Cart>> {
     const cart = await this.cartRepository
       .getOne({userId} , {},{ populate: [{ path: 'items.productId'}]})
       
     if (!cart) {
       throw new NotFoundException('Cart not found');
     }
-    return cart;
+    return {success : true , data : cart};
   }
 
   // Remove an item from the cart
-  async removeItemFromCart(userId: Types.ObjectId, productId: Types.ObjectId) {
+  async removeItemFromCart(userId: Types.ObjectId, productId: Types.ObjectId):Promise<UpdateResponse<Cart>> {
     // get item and remove it
     const cart = await this.cartRepository.update(
       { userId },
@@ -85,11 +82,11 @@ export class CartService {
       throw new NotFoundException('Cart not found');
     }
     // send response
-    return cart;
+    return {success : true , data : cart};
   }
 
   // Delete a cart by user ID
-  async deleteCart(userId: string): Promise<{ message: string }> {
+  async deleteCart(userId: string): Promise<DeleteResponse> {
     // delete item by userId
     const result = await this.cartRepository.delete({
       userId: new Types.ObjectId(userId),
@@ -99,6 +96,6 @@ export class CartService {
       throw new NotFoundException('Cart not found');
     }
 
-    return { message: 'Cart deleted successfully' };
+    return {success : true};
   }
 }
