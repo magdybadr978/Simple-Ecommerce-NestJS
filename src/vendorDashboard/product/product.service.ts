@@ -4,15 +4,16 @@ import { CreateResponse, DeleteResponse, GetAllResponse, GetOneResponse, UpdateR
 import { ProductRepository } from "src/models/product/product.repository";
 import { Product, ProductDocument } from "src/models/product/product.schema";
 import { CreateProductDTO, UpdateProductDTO } from "./dto";
+import { VendorRepository } from "src/models/vendor/vendor.repository";
 
 
 @Injectable()
 export class ProductService {
-  constructor(private readonly productRepository : ProductRepository) {}
+  constructor(private readonly productRepository : ProductRepository , private readonly vendorRepository : VendorRepository) {}
 
   // create product
   async createProduct(createProductDTO : CreateProductDTO):Promise<CreateResponse<Product>>{
-     // use create method 
+    // use create method 
       const product = await this.productRepository.create(createProductDTO) as ProductDocument;
       // failed
       if(!product) throw new BadGatewayException("failed to create product") 
