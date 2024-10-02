@@ -54,7 +54,7 @@ export class CartService {
     }
 
     // Update the cart with the new or updated items
-    const updatedCart = this.cartRepository.update({ _id: cart._id },{ items: cart.items },{ new: true ,lean : true}) as unknown as CartDocument;
+    const updatedCart = await this.cartRepository.update({ _id: cart._id },{ items: cart.items },{ new: true ,lean : true}) as unknown as CartDocument;
     return {success : true , data :updatedCart}
   }
 
