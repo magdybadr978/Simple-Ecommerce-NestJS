@@ -28,7 +28,7 @@ export abstract class AbstractRepository<T> {
     params?: ProjectionType<T>,
     options?: QueryOptions<T>,
   ) {
-    return this.nModel.find(query, params, options);
+    return this.nModel.find(query, params, options).lean().exec();
   }
 
   public getOne(
@@ -36,7 +36,7 @@ export abstract class AbstractRepository<T> {
     params?: ProjectionType<T>,
     options?: QueryOptions<T>,
   ) {
-    return this.repo.findOne(query, params, options);
+    return this.repo.findOne(query, params, options).lean().exec()
   }
 
   public getById(id : string | Types.ObjectId ,params? :ProjectionType<T> , options? : QueryOptions<T>){

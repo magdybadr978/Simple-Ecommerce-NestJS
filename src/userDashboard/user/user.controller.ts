@@ -16,7 +16,7 @@ export class UserController {
 
   @Post('signUp')
   async signUp(@Body() createUserDTO : CreateUserDTO){
-    return this.userService.signUp(createUserDTO)
+    return await this.userService.signUp(createUserDTO)
   }
 
  @Post("signIn")

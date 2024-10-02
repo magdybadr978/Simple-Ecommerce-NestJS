@@ -16,7 +16,7 @@ import { CartService } from './cart.service';
     //  { name: Person.name, schema: personSchema ,discriminators: [{name : User.name , schema : userSchema}] },
   ],
   controllers: [CartController],
-  providers: [CartService, CartRepository],
+  providers: [CartService, CartRepository,MongooseModule],
   exports: [CartService, CartRepository],
 })
 export class CartModule {}
