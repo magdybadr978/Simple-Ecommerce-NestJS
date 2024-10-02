@@ -21,7 +21,7 @@ export class UserService {
       // Hash password
       const hashPassword = await bcrypt.hash(createUserDTO.password,10)
       // make variable to add user 
-      const user = this.userRepository.create({...createUserDTO , password : hashPassword})as unknown as  UserDocument
+      const user = await this.userRepository.create({...createUserDTO , password : hashPassword})as unknown as  UserDocument
       // send response
       return {success : true , data : user}
     }
@@ -69,7 +69,7 @@ export class UserService {
       // wrapping data in update variable
       const update = { ...updateUserDTO , password :hashPassword}
       // create variable to add updated data
-      const updatedUser = this.userRepository.update({ _id: new Types.ObjectId(id) },update,{ new: true }) as unknown as  UserDocument;
+      const updatedUser = await this.userRepository.update({ _id: new Types.ObjectId(id) },update,{ new: true ,lean : true }) as unknown as  UserDocument;
       // return response  
       return { success : true , data : updatedUser}
         

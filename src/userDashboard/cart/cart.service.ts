@@ -54,7 +54,7 @@ export class CartService {
     }
 
     // Update the cart with the new or updated items
-    const updatedCart = this.cartRepository.update({ _id: cart._id },{ items: cart.items },{ new: true }) as unknown as CartDocument;
+    const updatedCart = this.cartRepository.update({ _id: cart._id },{ items: cart.items },{ new: true ,lean : true}) as unknown as CartDocument;
     return {success : true , data :updatedCart}
   }
 
@@ -75,7 +75,7 @@ export class CartService {
     const cart = await this.cartRepository.update(
       { userId },
       { $pull: { items: { productId: productId } } },
-      { new: true },
+      { new: true ,lean : true},
     );
     // failed
     if (!cart) {
@@ -95,7 +95,7 @@ export class CartService {
     if (result.deletedCount === 0) {
       throw new NotFoundException('Cart not found');
     }
-
+   // send response
     return {success : true};
   }
 }

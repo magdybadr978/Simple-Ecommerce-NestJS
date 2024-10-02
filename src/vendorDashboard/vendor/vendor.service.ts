@@ -61,8 +61,8 @@ export class VendorService {
     // failed
     if(phoneExist) throw new ConflictException("phone already exist");
     // send response
-    const updatedVendor = this.vendorRepository.update(  { _id: new Types.ObjectId(id) },updateVendorDTO,{ new: true }) as unknown as VendorDocument;
-    return {success : true , data : updatedVendor}
+    const updatedVendor = await this.vendorRepository.update(  { _id: new Types.ObjectId(id) },updateVendorDTO,{ new: true ,lean : true}) as unknown as VendorDocument;
+    return {success : true , data: updatedVendor}
   }
 
   // Delete Vendor data by Id
