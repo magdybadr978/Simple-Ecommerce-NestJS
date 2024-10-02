@@ -25,7 +25,7 @@ export class ProductService {
     // use getAll method
     const products = await this.productRepository.getAll({});
     // check if there is no products
-    if(products.length == 0) throw new NotFoundException("There is no Products")
+    if(products.length === 0) throw new NotFoundException("There is no Products")
       // send response
     return {success : true , data : products}
   }
@@ -49,7 +49,7 @@ export class ProductService {
     // failed
     if(!product) throw new NotFoundException("product not found");
     // update product
-    const updatedProduct =this.productRepository.update({ _id: new Types.ObjectId(id) },updateproductDTO,{ new: true }) as unknown as  ProductDocument;
+    const updatedProduct = await this.productRepository.update({ _id: new Types.ObjectId(id) },updateproductDTO,{ new: true , lean : true}) as unknown as  ProductDocument;
     return {success : true , data : updatedProduct}
   }
 
