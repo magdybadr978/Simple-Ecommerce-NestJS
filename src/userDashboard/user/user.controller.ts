@@ -6,21 +6,25 @@ import {
   Param,
   Post,
   Put,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDTO, UpdateUserDTO } from './dto';
+import { CreateUserDTO, SignInDTO, UpdateUserDTO } from './dto';
 
 @Controller('dashboard-user/user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post('signUp')
+  @UsePipes(ValidationPipe)
   async signUp(@Body() createUserDTO : CreateUserDTO){
     return await this.userService.signUp(createUserDTO)
   }
 
  @Post("signIn")
- async signIn(@Body() signInDTO : CreateUserDTO){
+ @UsePipes(ValidationPipe)
+ async signIn(@Body() signInDTO : SignInDTO){
   return this.userService.signIn(signInDTO)
  }
 
@@ -35,6 +39,7 @@ export class UserController {
   }
 
   @Put(':id')
+  @UsePipes(ValidationPipe)
   async updateUser(
     @Param('id') id: string,
     @Body()
