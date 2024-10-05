@@ -6,7 +6,7 @@ import { Types } from "mongoose";
 import { CreateResponse, DeleteResponse, GetAllResponse, GetOneResponse, UpdateResponse } from "src/common/dto/response.dto";
 import { UserRepository } from "src/models/user/user.repository";
 import { User, UserDocument } from "src/models/user/user.schema";
-import { CreateUserDTO, UpdateUserDTO } from "./dto";
+import { CreateUserDTO, SignInDTO, UpdateUserDTO } from "./dto";
 @Injectable()
 export class UserService {
   constructor(private readonly userRepository : UserRepository) {}
@@ -26,7 +26,7 @@ export class UserService {
       return {success : true , data : user}
     }
      // signIn for user
-    async signIn(signInDTO : CreateUserDTO): Promise<CreateResponse<User>>{
+    async signIn(signInDTO : SignInDTO): Promise<CreateResponse<User>>{
       // check if user exist
       const user = await this.userRepository.getOne({ phone : signInDTO.phone});
       // if user not found
