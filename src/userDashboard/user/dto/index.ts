@@ -1,10 +1,26 @@
-import { PartialType } from "@nestjs/swagger";
+import { ApiProperty, PartialType } from '@nestjs/swagger';
+import { IsPhoneNumber, IsString, IsStrongPassword } from 'class-validator';
 
-export class CreateUserDTO{
-      name: string;
-      phone: string;
-      password: string;   
+export class CreateUserDTO {
+  @ApiProperty()
+  @IsString()
+  name: string;
+
+  @ApiProperty()
+  @IsPhoneNumber('EG')
+  phone: string;
+
+  @ApiProperty()
+  @IsStrongPassword({
+    minLength: 8,
+    minLowercase: 1,
+    minNumbers: 1,
+    minSymbols: 1,
+    minUppercase: 1,
+  })
+  password: string;
 }
 
-export class UpdateUserDTO extends PartialType(CreateUserDTO){}
+export class SignInDTO extends PartialType(CreateUserDTO) {}
 
+export class UpdateUserDTO extends PartialType(CreateUserDTO) {}
