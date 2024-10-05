@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 
 @Schema({ timestamps: true, discriminatorKey: 'role', collection: 'person' })
 export class Person {
-  @Prop({ type: String })
+  @Prop({ type: String , trim : true})
   name: string;
 
   @Prop({ type: String, required: true, unique: true })
