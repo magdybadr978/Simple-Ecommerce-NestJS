@@ -8,7 +8,7 @@ export class CreateProductDTO {
   name: string;
 
   @ApiProperty()
-  @IsAlphanumeric()
+  @IsString()
   description: string;
 
   @ApiProperty()
