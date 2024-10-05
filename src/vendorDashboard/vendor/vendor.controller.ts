@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards, UsePipes, ValidationPipe } from "@nestjs/common";
 import { VendorService } from "./vendor.service";
 import { CreateVendorDTO, UpdateVendorDTO } from "./dto";
 
@@ -8,6 +8,7 @@ export class VendorController{
   constructor(private readonly vendorService :VendorService) {}
 
   @Post()
+  @UsePipes(ValidationPipe)
   async createVendor(
     @Body()
     createVendorDTO: CreateVendorDTO
@@ -26,6 +27,7 @@ export class VendorController{
   }
 
   @Put(':id')
+  @UsePipes(ValidationPipe)
   async updateVendor(
     @Param('id') id: string,
     @Body()
