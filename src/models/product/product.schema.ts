@@ -5,10 +5,10 @@ export type ProductDocument = Product & Document;
 
 @Schema({ timestamps: true })
 export class Product {
-  @Prop({ type: String })
+  @Prop({ type: String , trim : true})
   name: string;
 
-  @Prop({ type: String })
+  @Prop({ type: String , trim : true})
   description: string;
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Vendor' })
