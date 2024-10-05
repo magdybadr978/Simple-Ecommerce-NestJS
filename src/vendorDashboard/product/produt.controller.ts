@@ -6,6 +6,8 @@ import {
   Delete,
   Body,
   Param,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { Types } from 'mongoose';
@@ -17,6 +19,7 @@ export class productController {
   constructor(private readonly productService: ProductService) {}
 
   @Post()
+  @UsePipes(ValidationPipe)
   async createProduct(
     @Body() createproductDTO: CreateProductDTO,
   ) {
@@ -34,6 +37,7 @@ export class productController {
   }
 
   @Put(':id')
+  @UsePipes(ValidationPipe)
   async updateproduct(
     @Param('id') id: string,
     @Body() updateproductDTO: UpdateProductDTO,
