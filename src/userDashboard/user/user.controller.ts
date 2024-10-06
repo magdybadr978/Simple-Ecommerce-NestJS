@@ -6,11 +6,13 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDTO, SignInDTO, UpdateUserDTO } from './dto';
+import { AuthGuard } from 'src/Guards/Authentication';
 
 @Controller('dashboard-user/user')
 export class UserController {
@@ -29,16 +31,19 @@ export class UserController {
  }
 
   @Get()
+  @UseGuards(AuthGuard)
   async getAllUsers() {
     return await this.userService.getAllUsers();
   }
 
   @Get(':id')
+  @UseGuards(AuthGuard)
   async getSpecificUser(@Param('id') id: string) {
     return await this.userService.getUserById(id);
   }
 
   @Put(':id')
+  @UseGuards(AuthGuard)
   @UsePipes(ValidationPipe)
   async updateUser(
     @Param('id') id: string,
@@ -52,6 +57,7 @@ export class UserController {
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard)
   async deleteUser(@Param('id') id: string) {
     return await this.userService.deleteUser(id);
   }

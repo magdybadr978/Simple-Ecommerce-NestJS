@@ -7,9 +7,10 @@ import { CreateResponse, DeleteResponse, GetAllResponse, GetOneResponse, UpdateR
 import { UserRepository } from "src/models/user/user.repository";
 import { User, UserDocument } from "src/models/user/user.schema";
 import { CreateUserDTO, SignInDTO, UpdateUserDTO } from "./dto";
+import { JwtService } from "@nestjs/jwt";
 @Injectable()
 export class UserService {
-  constructor(private readonly userRepository : UserRepository) {}
+  constructor(private readonly userRepository : UserRepository , private readonly jwtService : JwtService) {}
 
 
     // signUp for user
@@ -35,8 +36,10 @@ export class UserService {
       const passwordValid = await bcrypt.compare(signInDTO.password, user.password);
       // check valid password 
       if (!passwordValid) throw new UnauthorizedException ('Invalid credentials');
+      // use token
+       const token =  this.jwtService.sign({ id : user._id , phone : user.phone},{secret: process.env.TOKEN_SIGNATURE})as unknown as UserDocument
       // return user details 
-      return { success : true , data : user };
+      return { success : true , data : token };
     }
   
     // Get all Users

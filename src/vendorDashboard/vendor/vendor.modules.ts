@@ -1,4 +1,6 @@
 import { Module } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { AuthService } from 'src/Guards/Auth.service';
 import { UserMongoModule } from 'src/shared/modules/user-mongo.module';
 import { VendorController } from './vendor.controller';
 import { VendorService } from './vendor.service';
@@ -9,7 +11,7 @@ import { VendorService } from './vendor.service';
     UserMongoModule,
   ],
   controllers: [VendorController],
-  providers: [VendorService],
+  providers: [VendorService,AuthService,JwtService],
   exports: [VendorService],
 })
 export class VendorModule {}

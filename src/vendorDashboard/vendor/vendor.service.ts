@@ -9,9 +9,11 @@ import { CreateResponse, DeleteResponse, GetAllResponse, GetOneResponse, UpdateR
 import { VendorRepository } from 'src/models/vendor/vendor.repository';
 import { Vendor, VendorDocument } from 'src/models/vendor/vendor.schema';
 import { CreateVendorDTO } from './dto';
+import { JwtService } from '@nestjs/jwt';
 @Injectable()
 export class VendorService {
-  constructor(private readonly vendorRepository: VendorRepository) {}
+  constructor(private readonly vendorRepository: VendorRepository ,
+              private readonly jwtService : JwtService) {}
 
   // Create a new Vendor
   async createVendor(createVendorDTO: CreateVendorDTO): Promise<CreateResponse<Vendor>> {
