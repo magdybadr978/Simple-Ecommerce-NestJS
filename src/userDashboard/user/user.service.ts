@@ -20,7 +20,7 @@ export class UserService {
       // if exist throw error
       if(userExist) throw new BadRequestException("user already exist")
       // Hash password
-      const hashPassword = await bcrypt.hash(createUserDTO.password,10)
+      const hashPassword = await bcrypt.hash(createUserDTO.password,+process.env.SALT_ROUND)
       // make variable to add user 
       const user = await this.userRepository.create({...createUserDTO , password : hashPassword})as unknown as  UserDocument
       // send response

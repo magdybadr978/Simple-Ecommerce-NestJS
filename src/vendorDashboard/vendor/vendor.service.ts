@@ -24,7 +24,7 @@ export class VendorService {
     // failed
     if (user) throw new ConflictException('phone already exist');
     // hash password
-    createVendorDTO.password = await bcrypt.hash(createVendorDTO.password, 10);
+    createVendorDTO.password = await bcrypt.hash(createVendorDTO.password,+process.env.SALT_ROUND);   
     // add to database
     const createdVendor = await this.vendorRepository.create(createVendorDTO) as VendorDocument;
     // send response
