@@ -37,7 +37,7 @@ export class UserService {
       // check valid password 
       if (!passwordValid) throw new UnauthorizedException ('Invalid credentials');
       // use token
-       const token =  this.jwtService.sign({ id : user._id , phone : user.phone},{secret: process.env.TOKEN_SIGNATURE})as unknown as UserDocument
+       const token =  this.jwtService.sign({ id : user._id ,role : user.role ,phone : user.phone},{secret: process.env.TOKEN_SIGNATURE})as unknown as UserDocument
       // return user details 
       return { success : true , data : token };
     }
