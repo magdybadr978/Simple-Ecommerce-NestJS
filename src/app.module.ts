@@ -3,6 +3,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { VendorDashboardModule } from './vendorDashboard/vendorDashboard.module';
 import { UserDashboardModule } from './userDashboard/userDashboard.modules';
 import { ConfigModule } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
+import { RolesGuard } from './Guards/Authorization';
 
 @Module({
   imports: [
@@ -12,6 +14,6 @@ import { ConfigModule } from '@nestjs/config';
     UserDashboardModule
   ],
   controllers: [],
-  providers: [],
+  providers: [{ provide : APP_GUARD , useClass : RolesGuard}],
 })
 export class AppModule {}
