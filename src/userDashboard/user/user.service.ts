@@ -1,13 +1,13 @@
 
 
-import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
+import { BadRequestException, ForbiddenException, HttpException, Injectable, NotFoundException, Req, UnauthorizedException } from "@nestjs/common";
+import { JwtService } from "@nestjs/jwt";
 import * as bcrypt from "bcryptjs";
 import { Types } from "mongoose";
 import { CreateResponse, DeleteResponse, GetAllResponse, GetOneResponse, UpdateResponse } from "src/common/dto/response.dto";
 import { UserRepository } from "src/models/user/user.repository";
 import { User, UserDocument } from "src/models/user/user.schema";
 import { CreateUserDTO, SignInDTO, UpdateUserDTO } from "./dto";
-import { JwtService } from "@nestjs/jwt";
 @Injectable()
 export class UserService {
   constructor(private readonly userRepository : UserRepository , private readonly jwtService : JwtService) {}
@@ -52,21 +52,41 @@ export class UserService {
     }
   
     // Get a User by id
-    async getUserById(id: string):Promise<GetOneResponse<User>>{
+    async getUserById(id: string ,request : any):Promise<GetOneResponse<User>>{
       // find User 
-      const user = await this.userRepository.getOne({ _id: new Types.ObjectId(id) });
+      const userExist = await this.userRepository.getOne({ _id: new Types.ObjectId(id) });
       // check id User exist
-      if(!user) throw new NotFoundException("Not found User");
+      if(!userExist) throw new NotFoundException("Not found User");
       // return response
-      return { success : true , data : user}
+      return { success : true , data : userExist}
+    }
+
+    // get my Profile
+    async getMyProfile(request : any):Promise<GetOneResponse<User>>{
+      // get data from request
+      const user = request.user;
+      console.log(user.id);
+      
+      // check if user not exist
+      const userExist = await this.userRepository.getOne({_id : new Types.ObjectId(user.id)})
+      //failed
+      if(!userExist) throw new NotFoundException("user not exist")
+      // send response
+      return {success : true , data : userExist}
     }
   
     // Update User data by Id
-    async updateUser(id : string,updateUserDTO : UpdateUserDTO):Promise<UpdateResponse<User>> {
+    async updateUser(id : string,updateUserDTO : UpdateUserDTO , request : any):Promise<UpdateResponse<User>> {
+      // get user from request
+      const user = request.user;
       // find user
-      const user = await this.userRepository.getOne({_id : new Types.ObjectId(id)})
+      const userExist = await this.userRepository.getOne({_id : new Types.ObjectId(id)})
       //if not found user
-      if(!user) throw new NotFoundException("User not found")
+      if(!userExist) throw new NotFoundException("User not found")
+      // check this is the valid user
+      if(!new Types.ObjectId(id).equals( new Types.ObjectId(user.id))){
+        throw new ForbiddenException("not authorizied to update")
+      }
       // hash password
       const hashPassword = await bcrypt.hash(updateUserDTO.password,8);
       // wrapping data in update variable
@@ -79,11 +99,17 @@ export class UserService {
     }
   
     // Delete User data by Id
-    async deleteUser(id: string): Promise<DeleteResponse> {
-      // use method delete 
-      const user = await this.userRepository.delete({ _id: new Types.ObjectId(id) });
-      // check if user deleted or not
-      if(user.deletedCount == 0) throw new NotFoundException("user not found")
+    async deleteUser(id: string ,request : any ): Promise<DeleteResponse> {
+      // get data from request
+      const user = request.user;
+      // check if this is the valid user  
+      if(!new Types.ObjectId(id).equals(new Types.ObjectId(user.id))){
+        throw new ForbiddenException("not authorizied")
+      }
+        // use method delete 
+        const userExist = await this.userRepository.delete({ _id: new Types.ObjectId(id) });
+        // check if user deleted or not
+        if(userExist.deletedCount == 0) throw new NotFoundException("user not found")
       // send response
       return {success : true}
     }
