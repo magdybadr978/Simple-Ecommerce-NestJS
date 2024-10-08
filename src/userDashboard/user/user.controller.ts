@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Req,
   UseGuards,
   UsePipes,
   ValidationPipe,
@@ -15,6 +16,7 @@ import { CreateUserDTO, SignInDTO, UpdateUserDTO } from './dto';
 import { AuthGuard } from 'src/Guards/Authentication';
 import { RolesGuard } from 'src/Guards/Authorization';
 import { Roles } from 'src/common/Guards/roles.decorator';
+import { request } from 'http';
 
 @Controller('dashboard-user/user')
 export class UserController {
@@ -42,8 +44,14 @@ export class UserController {
   @Get(':id')
   @UseGuards(AuthGuard,RolesGuard)
   @Roles('User')
-  async getSpecificUser(@Param('id') id: string) {
-    return await this.userService.getUserById(id);
+  async getSpecificUser(@Param('id') id: string , @Req() request :any) {
+    return await this.userService.getUserById(id , request);
+  }
+
+  @Get('myData')
+  @UseGuards(AuthGuard)
+  async getAccount(@Req() request : any){
+    return await this.userService.getMyProfile(request)
   }
 
   @Put(':id')
@@ -53,18 +61,20 @@ export class UserController {
   async updateUser(
     @Param('id') id: string,
     @Body()
-    updateUserDTO: UpdateUserDTO
+    updateUserDTO: UpdateUserDTO,
+    @Req() request : any
   ) {
     return this.userService.updateUser(
       id,
-      updateUserDTO
+      updateUserDTO,
+      request
     );
   }
 
   @Delete(':id')
   @UseGuards(AuthGuard,RolesGuard)
   @Roles('User')
-  async deleteUser(@Param('id') id: string) {
-    return await this.userService.deleteUser(id);
+  async deleteUser(@Param('id') id: string , @Req() request : any) {
+    return await this.userService.deleteUser(id , request);
   }
 }
