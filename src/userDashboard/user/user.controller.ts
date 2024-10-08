@@ -13,6 +13,8 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDTO, SignInDTO, UpdateUserDTO } from './dto';
 import { AuthGuard } from 'src/Guards/Authentication';
+import { RolesGuard } from 'src/Guards/Authorization';
+import { Roles } from 'src/common/Guards/roles.decorator';
 
 @Controller('dashboard-user/user')
 export class UserController {
@@ -31,19 +33,22 @@ export class UserController {
  }
 
   @Get()
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard,RolesGuard)
+  @Roles('User')
   async getAllUsers() {
     return await this.userService.getAllUsers();
   }
 
   @Get(':id')
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard,RolesGuard)
+  @Roles('User')
   async getSpecificUser(@Param('id') id: string) {
     return await this.userService.getUserById(id);
   }
 
   @Put(':id')
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard,RolesGuard)
+  @Roles('User')
   @UsePipes(ValidationPipe)
   async updateUser(
     @Param('id') id: string,
@@ -57,7 +62,8 @@ export class UserController {
   }
 
   @Delete(':id')
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard,RolesGuard)
+  @Roles('User')
   async deleteUser(@Param('id') id: string) {
     return await this.userService.deleteUser(id);
   }
