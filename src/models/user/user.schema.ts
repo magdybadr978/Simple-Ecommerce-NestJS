@@ -8,6 +8,7 @@ export class User {
   name: string;
   phone: string;
   password: string;
+  role : string;
   readonly _id?: mongoose.Schema.Types.ObjectId;
 }
 
