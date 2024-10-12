@@ -1,0 +1,1 @@
+export const Order_Status = ["placed", "shipped", "delivered", "cancelled"];
