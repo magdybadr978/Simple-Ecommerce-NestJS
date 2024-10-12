@@ -50,7 +50,11 @@ export class VendorService {
 
   // Get all vendors
   async getAllVendors(): Promise<GetAllResponse<Vendor>>{
+    // get all data
     const vendors = await this.vendorRepository.getAll({});
+    // check if empty array
+    if(vendors.length == 0 ) throw new NotFoundException("there is no vendors")
+      // send response
     return {success : true , data : vendors}
   }
 
