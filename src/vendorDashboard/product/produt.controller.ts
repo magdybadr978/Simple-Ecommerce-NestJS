@@ -1,19 +1,20 @@
 import {
+  Body,
   Controller,
+  Delete,
   Get,
+  Param,
   Post,
   Put,
-  Delete,
-  Body,
-  Param,
+  UseGuards,
   UsePipes,
   ValidationPipe,
-  UseGuards,
 } from '@nestjs/common';
-import { ProductService } from './product.service';
-import { Types } from 'mongoose';
-import { CreateProductDTO, UpdateProductDTO } from './dto';
 import { AuthGuard } from 'src/Guards/Authentication';
+import { RolesGuard } from 'src/Guards/Authorization';
+import { Roles } from 'src/common/Guards/roles.decorator';
+import { CreateProductDTO, UpdateProductDTO } from './dto';
+import { ProductService } from './product.service';
 
 
 @Controller('dashboard-vendor/product')
@@ -21,7 +22,8 @@ export class productController {
   constructor(private readonly productService: ProductService) {}
 
   @Post()
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard,RolesGuard)
+  @Roles('Vendor')
   @UsePipes(ValidationPipe)
   async createProduct(
     @Body() createproductDTO: CreateProductDTO,
@@ -30,7 +32,8 @@ export class productController {
   }
 
   @Get()
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard,RolesGuard)
+  @Roles('Vendor')
   async getAllProducts() {
     return await this.productService.getAllProducts();
   }
@@ -42,7 +45,8 @@ export class productController {
   }
 
   @Put(':id')
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard,RolesGuard)
+  @Roles('Vendor')
   @UsePipes(ValidationPipe)
   async updateproduct(
     @Param('id') id: string,
@@ -55,7 +59,8 @@ export class productController {
   }
 
   @Delete(':id')
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard,RolesGuard)
+  @Roles('Vendor')
   async deleteproduct(@Param('id') id: string) {
     return await this.productService.deleteproduct(id);
   }
