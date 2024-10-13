@@ -1,10 +1,9 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Req, UseGuards, UsePipes, ValidationPipe } from "@nestjs/common";
-import { VendorService } from "./vendor.service";
-import { CreateVendorDTO, SignInDTO, UpdateVendorDTO } from "./dto";
 import { AuthGuard } from "src/Guards/Authentication";
 import { RolesGuard } from "src/Guards/Authorization";
 import { Roles } from "src/common/Guards/roles.decorator";
-import { request } from "http";
+import { CreateVendorDTO, SignInDTO, UpdateVendorDTO } from "./dto";
+import { VendorService } from "./vendor.service";
 
 
 @Controller('dashboard-vendor/vendor')
