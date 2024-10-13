@@ -5,10 +5,13 @@ import { Order } from "src/models/order/order.schema";
 import { OrderController } from "./order.controller";
 import { OrderService } from "./order.service";
 import { OrderRepository } from "src/models/order/order.repository";
+import { UserMongoModule } from "src/shared/modules/user-mongo.module";
+import { ProductModule } from "src/vendorDashboard/product/product.modules";
 
 @Module({
   imports : [ MongooseModule.forFeature([{ name : Order.name , schema : cartSchema}]),
-  OrderModule
+  UserMongoModule,
+  ProductModule
 ],
   controllers : [OrderController],
   providers : [OrderService , OrderRepository],
