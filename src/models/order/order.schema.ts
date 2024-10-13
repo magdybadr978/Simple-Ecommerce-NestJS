@@ -2,29 +2,29 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Types } from 'mongoose';
 import { Order_Status } from '../common/constants';
 
+export type OrderDocument = Order & Document
+
 @Schema({ timestamps: true })
 export class Order {
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true })
   userId: Types.ObjectId;
 
   @Prop([
-    {
+      {
       productId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Product',
         required: true,
       },
-      name: String,
-      itemPrice : Number,
-      totalPrice : { type : Number , default : 0}
+      name: { type : String , required : true},
+      price : { type : Number , required : true}
     },
   ])
   products: {
     productId: Types.ObjectId;
     name: string;
-    itemPrice : number;
-    totalPrice : number; 
-  };
+    price : number
+  }[];
 
   @Prop({ type: String, required: true })
   address: string;
