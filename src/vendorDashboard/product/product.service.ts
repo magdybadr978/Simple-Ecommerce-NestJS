@@ -13,6 +13,10 @@ export class ProductService {
 
   // create product
   async createProduct(createProductDTO : CreateProductDTO):Promise<CreateResponse<Product>>{
+    // check if vendor exist
+      const vendor = await this.vendorRepository.getOne({_id : createProductDTO.vendorId})
+      // failed
+      if(!vendor) throw new NotFoundException("vendor not exist")
     // use create method 
       const product = await this.productRepository.create(createProductDTO) as ProductDocument;
       // failed
