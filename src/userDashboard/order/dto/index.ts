@@ -1,6 +1,6 @@
 import { ApiProperty, PartialType } from "@nestjs/swagger";
 import { Type } from "class-transformer";
-import { IsArray, IsMongoId, IsNumber, IsPhoneNumber, IsPositive, IsString, ValidateNested } from "class-validator";
+import { IsArray, IsMongoId, IsNumber, IsOptional, IsPhoneNumber, IsPositive, IsString, ValidateNested } from "class-validator";
 import mongoose, { Types } from "mongoose";
 import { ProductInfoDTO } from "src/vendorDashboard/product/dto";
 
@@ -29,6 +29,7 @@ export class CreateOrderDTO {
   @ApiProperty()
   @IsNumber()
   @IsPositive()
+  @IsOptional()
   price : number
 
   @ApiProperty()
