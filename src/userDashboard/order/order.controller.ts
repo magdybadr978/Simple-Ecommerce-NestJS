@@ -10,7 +10,7 @@ export class OrderController{
 
   @Post('create')
   async createOrder(@Body() createOrderDTO : CreateOrderDTO){
-    return await this.orderService.createOrder(createOrderDTO)
+    return await this.orderService.createNewOrder(createOrderDTO)
   }
 
   @Post('/:id')
