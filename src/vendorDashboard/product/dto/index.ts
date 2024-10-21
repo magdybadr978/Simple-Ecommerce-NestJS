@@ -32,10 +32,6 @@ export class ProductInfoDTO {
   @IsNumber()
   @Min(1, { message: 'Quantity must be at least 1' })
   quantity: number;
-
-  @ApiProperty()
-  @IsNumber()
-  price : number
 }
 
 export class UpdateProductDTO extends PartialType(CreateProductDTO) {}
