@@ -12,12 +12,10 @@ export class Order {
   @Prop([{
     productId: {type: mongoose.Schema.Types.ObjectId,ref: 'Product',required: true},
     quantity : {type : Number , required : true},
-    price : {type : Number , required : true}
 }])
   products: {
     productId: Types.ObjectId;
     quantity : number
-    price : number
   }[];
 
   @Prop({ type: String, required: true })
