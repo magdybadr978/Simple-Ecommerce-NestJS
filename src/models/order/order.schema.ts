@@ -9,20 +9,14 @@ export class Order {
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true })
   userId: Types.ObjectId;
 
-  @Prop([
-      {
-      productId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Product',
-        required: true,
-      },
-      name: { type : String , required : true},
-      price : { type : Number , required : true}
-    },
-  ])
+  @Prop([{
+    productId: {type: mongoose.Schema.Types.ObjectId,ref: 'Product',required: true},
+    quantity : {type : Number , required : true},
+    price : {type : Number , required : true}
+}])
   products: {
     productId: Types.ObjectId;
-    name: string;
+    quantity : number
     price : number
   }[];
 
