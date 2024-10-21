@@ -1,5 +1,5 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { IsMongoId, IsNumber, IsPositive, IsString } from 'class-validator';
+import { IsMongoId, IsNotEmpty, IsNumber, IsPositive, IsString, Min } from 'class-validator';
 import { Types } from 'mongoose';
 
 export class CreateProductDTO {
@@ -22,20 +22,20 @@ export class CreateProductDTO {
 }
 
 
-// for order
-export class ProductDTO {
+export class ProductInfoDTO {
   @ApiProperty()
-  @IsMongoId()
-  productId: Types.ObjectId; // Instead of vendorId, use productId for the order
-
-  @ApiProperty()
-  @IsString()
-  name: string;
+  @IsMongoId({ message: 'Product ID must be a valid Mongo ID' })
+  @IsNotEmpty({ message: 'Product ID is required' })
+  productId: Types.ObjectId;
 
   @ApiProperty()
   @IsNumber()
-  @IsPositive()
-  price: number;
+  @Min(1, { message: 'Quantity must be at least 1' })
+  quantity: number;
+
+  @ApiProperty()
+  @IsNumber()
+  price : number
 }
 
 export class UpdateProductDTO extends PartialType(CreateProductDTO) {}
