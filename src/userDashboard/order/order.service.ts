@@ -35,10 +35,8 @@ export class OrderService {
     const totalOrder = {...createOrderDTO ,products : orderProducts, price : totalPrice}
     //create new order
     const order = await this.orderRepository.create(totalOrder) as unknown as OrderDocument
-    console.log(order);
-    
     // send response
-    return { success : true , data : totalOrder}
+    return { success : true , data : order}
   }
 
 
