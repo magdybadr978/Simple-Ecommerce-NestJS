@@ -13,7 +13,7 @@ export class OrderService {
   constructor(private readonly orderRepository : OrderRepository , private readonly userRepository : UserRepository , private readonly productRepository : ProductRepository) {}
 
   // create order
-  async createOrder(createOrderDTO : CreateOrderDTO) : Promise<CreateResponse<Order>>{
+  async createNewOrder(createOrderDTO : CreateOrderDTO) : Promise<CreateResponse<Order>>{
     // check if user exist 
     const user = await this.userRepository.getOne({_id : new Types.ObjectId(createOrderDTO.userId)})
     // failed
@@ -27,16 +27,18 @@ export class OrderService {
       // failed
       if(!product) throw new NotFoundException(`product ${item.productId} not exist`)
       // add order products 
-      orderProducts.push({ productId : product._id, name : product.name , price : product.price})
-        // get total price
-      totalPrice += product.price
+      orderProducts.push({ productId : product._id , quantity : item.quantity , price : product.price})
+      // get total price
+      totalPrice += product.price * item.quantity
     }
     // wrapping data
     const totalOrder = {...createOrderDTO ,products : orderProducts, price : totalPrice}
-   //create new order
-   const order = await this.orderRepository.create(totalOrder) as unknown as OrderDocument 
+    //create new order
+    const order = await this.orderRepository.create(totalOrder) as unknown as OrderDocument
+    console.log(order);
+    
     // send response
-    return { success : true , data : order}
+    return { success : true , data : totalOrder}
   }
 
 
