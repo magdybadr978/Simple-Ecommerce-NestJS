@@ -2,7 +2,8 @@ import { ApiProperty, PartialType } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 import { IsArray, IsMongoId, IsNumber, IsPhoneNumber, IsPositive, IsString, ValidateNested } from "class-validator";
 import mongoose, { Types } from "mongoose";
-import { ProductDTO } from "src/vendorDashboard/product/dto";
+import { ProductInfoDTO } from "src/vendorDashboard/product/dto";
+
 
 
 export class CreateOrderDTO {
@@ -10,11 +11,12 @@ export class CreateOrderDTO {
   @IsMongoId()
   userId : Types.ObjectId;
 
-  @ApiProperty({ type : [ProductDTO] , required : true})
-  @IsArray()
-  @ValidateNested({each : true})
-  @Type(()=> ProductDTO)
-  products : ProductDTO[];    
+  @ApiProperty({ type: Array, description: 'Array of products with productId and quantity' })
+  @IsArray({ message: 'Products must be an array' })
+  @ValidateNested({ each: true })
+  @Type(() => ProductInfoDTO)
+  products: ProductInfoDTO[];
+
 
   @ApiProperty()
   @IsString()
