@@ -5,20 +5,29 @@ import { ProductRepository } from "src/models/product/product.repository";
 import { Product, ProductDocument } from "src/models/product/product.schema";
 import { CreateProductDTO, UpdateProductDTO } from "./dto";
 import { VendorRepository } from "src/models/vendor/vendor.repository";
+import { FileService } from "src/Guards/multer";
 
 
 @Injectable()
 export class ProductService {
-  constructor(private readonly productRepository : ProductRepository , private readonly vendorRepository : VendorRepository) {}
+  constructor(private readonly productRepository : ProductRepository , private readonly vendorRepository : VendorRepository , private readonly fileService : FileService) {}
 
   // create product
-  async createProduct(createProductDTO : CreateProductDTO):Promise<CreateResponse<Product>>{
+  async createProduct(createProductDTO : CreateProductDTO , file : Express.Multer.File):Promise<CreateResponse<Product>>{
     // check if vendor exist
       const vendor = await this.vendorRepository.getOne({_id : createProductDTO.vendorId})
       // failed
       if(!vendor) throw new NotFoundException("vendor not exist")
-    // use create method 
-      const product = await this.productRepository.create(createProductDTO) as ProductDocument;
+        //Handle file upload
+      let filePath = '';
+      // if file exist
+      if(file){
+        filePath = await this.fileService.uploadFile(file);
+      }
+      // wrapping data in variable
+      const productData = {...createProductDTO , photo : filePath}
+      // use create method 
+      const product = await this.productRepository.create(productData) as ProductDocument;
       // failed
       if(!product) throw new BadGatewayException("failed to create product") 
         // send response
