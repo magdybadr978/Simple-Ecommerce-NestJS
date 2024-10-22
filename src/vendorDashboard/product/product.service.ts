@@ -5,7 +5,10 @@ import { ProductRepository } from "src/models/product/product.repository";
 import { Product, ProductDocument } from "src/models/product/product.schema";
 import { CreateProductDTO, UpdateProductDTO } from "./dto";
 import { VendorRepository } from "src/models/vendor/vendor.repository";
-import { FileService } from "src/Guards/multer";
+import { FileService } from "src/common/services/file-upload.service";
+import * as path from "path";
+import * as fs from "fs";
+import { UPLOADS_DIRECTORY } from "src/config/constants";
 
 
 @Injectable()
@@ -69,6 +72,24 @@ export class ProductService {
 
   // Delete a product by id
   async deleteproduct(id: string): Promise<DeleteResponse> {
+    // get product to check if there is a photo
+    const productExist = await this.productRepository.getOne({_id : new Types.ObjectId(id)})
+    // product not found
+    if(!productExist) throw new NotFoundException("product not exist")
+      // if product has a photo , delete it
+    if(productExist.photo){
+      const photoPath = path.join(UPLOADS_DIRECTORY,productExist.photo)
+      console.log(photoPath);  
+      console.log(UPLOADS_DIRECTORY + productExist.photo);
+      
+      try {
+        if(fs.existsSync(photoPath)){
+          fs.unlinkSync(photoPath) // delete photo from file system
+        }
+      } catch (error) {
+        throw new BadGatewayException("failed to delete photo")
+      }
+    }
     // use method delete with id
     const product = await this.productRepository.delete({
       _id: new Types.ObjectId(id),
