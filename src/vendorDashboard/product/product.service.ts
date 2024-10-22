@@ -79,9 +79,6 @@ export class ProductService {
       // if product has a photo , delete it
     if(productExist.photo){
       const photoPath = path.join(UPLOADS_DIRECTORY,productExist.photo)
-      console.log(photoPath);  
-      console.log(UPLOADS_DIRECTORY + productExist.photo);
-      
       try {
         if(fs.existsSync(photoPath)){
           fs.unlinkSync(photoPath) // delete photo from file system
