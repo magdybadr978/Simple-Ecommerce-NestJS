@@ -1,4 +1,5 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 import { IsMongoId, IsNotEmpty, IsNumber, IsPositive, IsString, Min } from 'class-validator';
 import { Types } from 'mongoose';
 
@@ -12,6 +13,7 @@ export class CreateProductDTO {
   description: string;
 
   @ApiProperty()
+  @Transform(({ value }) => parseInt(value))
   @IsNumber()
   @IsPositive()
   price : number;
