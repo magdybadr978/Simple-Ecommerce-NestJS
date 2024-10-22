@@ -6,7 +6,9 @@ import {
   Param,
   Post,
   Put,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -15,6 +17,7 @@ import { RolesGuard } from 'src/Guards/Authorization';
 import { Roles } from 'src/common/Guards/roles.decorator';
 import { CreateProductDTO, UpdateProductDTO } from './dto';
 import { ProductService } from './product.service';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 
 @Controller('dashboard-vendor/product')
@@ -25,10 +28,12 @@ export class productController {
   @UseGuards(AuthGuard,RolesGuard)
   @Roles('Vendor')
   @UsePipes(ValidationPipe)
+  @UseInterceptors(FileInterceptor('file'))
   async createProduct(
     @Body() createproductDTO: CreateProductDTO,
+    @UploadedFile() file : Express.Multer.File
   ) {
-    return await this.productService.createProduct(createproductDTO);
+    return await this.productService.createProduct(createproductDTO , file);
   }
 
   @Get()
