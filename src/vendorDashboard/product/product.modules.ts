@@ -8,12 +8,13 @@ import { UserMongoModule } from 'src/shared/modules/user-mongo.module';
 import { AuthService } from 'src/Guards/Auth.service';
 import { JwtService } from '@nestjs/jwt';
 import { RolesGuard } from 'src/Guards/Authorization';
+import { FileService } from 'src/Guards/multer';
 
 
 @Module({
   imports: [ MongooseModule.forFeature([{ name : Product.name , schema : productSchema}]), UserMongoModule],
   controllers: [productController],
-  providers: [ProductService,ProductRepository,AuthService,JwtService,RolesGuard],
-  exports : [ProductService,ProductRepository]
+  providers: [ProductService,ProductRepository,AuthService,JwtService,RolesGuard,FileService],
+  exports : [ProductService,ProductRepository, FileService]
 })
 export class ProductModule {}
