@@ -14,6 +14,9 @@ export class Product {
   @Prop({ type : Number , required : true})
   price : number;
 
+  @Prop({type : String})
+  photo : string
+
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Vendor' })
   vendorId: Types.ObjectId;
 
