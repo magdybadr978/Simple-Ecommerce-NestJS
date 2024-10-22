@@ -8,7 +8,8 @@ import { UserMongoModule } from 'src/shared/modules/user-mongo.module';
 import { AuthService } from 'src/Guards/Auth.service';
 import { JwtService } from '@nestjs/jwt';
 import { RolesGuard } from 'src/Guards/Authorization';
-import { FileService } from 'src/Guards/multer';
+import { FileService } from 'src/common/services/file-upload.service';
+
 
 
 @Module({
