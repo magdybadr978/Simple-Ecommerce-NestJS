@@ -1,10 +1,3 @@
-export type FindAll<T> = {
-  data: T[];
-  currentPage: number;
-  numberOfPages: number;
-  numberOfRecords: number;
-};
-
 export type GetAll = {
   limit?: number;
   page?: number;
