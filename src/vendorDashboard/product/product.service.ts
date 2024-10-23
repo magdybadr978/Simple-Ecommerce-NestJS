@@ -39,9 +39,13 @@ export class ProductService {
   }
 
   //get All products
-  async getAllProducts(page : number = 1 ,limit : number = 3):Promise<GetAllResponse<Product>> {
+  async getAllProducts(
+    page : number = 1 ,
+    limit : number = 3 ,
+    sort : string = 'name' ,
+    order: 'asc' | 'desc' = 'asc'):Promise<GetAllResponse<Product>> {
     // define the pagination number
-    const params : GetAll = { page , limit , paginate : true};
+    const params : GetAll = { page , limit , sort , order , paginate : true};
     // use getAll method
     const products = await this.productRepository.getAll({} , params);
     // check if there is no products
