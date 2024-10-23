@@ -1,6 +1,6 @@
 import { BadGatewayException, Injectable, NotFoundException } from "@nestjs/common";
 import { Types } from "mongoose";
-import { CreateResponse, DeleteResponse, GetAllResponse, GetOneResponse, UpdateResponse } from "src/common/dto/response.dto";
+import { CreateResponse, DeleteResponse, GetAllResponse, GetAllWithPagination, GetOneResponse, UpdateResponse } from "src/common/dto/response.dto";
 import { ProductRepository } from "src/models/product/product.repository";
 import { Product, ProductDocument } from "src/models/product/product.schema";
 import { CreateProductDTO, UpdateProductDTO } from "./dto";
@@ -9,6 +9,7 @@ import { FileService } from "src/common/services/file-upload.service";
 import * as path from "path";
 import * as fs from "fs";
 import { UPLOADS_DIRECTORY } from "src/config/constants";
+import { GetAll } from "src/common/type";
 
 
 @Injectable()
@@ -38,13 +39,15 @@ export class ProductService {
   }
 
   //get All products
-  async getAllProducts():Promise<GetAllResponse<Product>> {
+  async getAllProducts(page : number = 1 ,limit : number = 3):Promise<GetAllResponse<Product>> {
+    // define the pagination number
+    const params : GetAll = { page , limit , paginate : true};
     // use getAll method
-    const products = await this.productRepository.getAll({});
+    const products = await this.productRepository.getAll({} , params);
     // check if there is no products
     if(products.length === 0) throw new NotFoundException("There is no Products")
       // send response
-    return {success : true , data : products}
+    return {success : true , data : products }
   }
 
   // Get a product by id

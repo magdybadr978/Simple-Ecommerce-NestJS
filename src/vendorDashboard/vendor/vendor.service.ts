@@ -7,11 +7,12 @@ import {
 } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
 import { Types } from 'mongoose';
-import { CreateResponse, DeleteResponse, GetAllResponse, GetOneResponse, UpdateResponse } from 'src/common/dto/response.dto';
+import { CreateResponse, DeleteResponse, GetAllResponse, GetAllWithPagination, GetOneResponse, UpdateResponse } from 'src/common/dto/response.dto';
 import { VendorRepository } from 'src/models/vendor/vendor.repository';
 import { Vendor, VendorDocument } from 'src/models/vendor/vendor.schema';
 import { CreateVendorDTO, SignInDTO } from './dto';
 import { JwtService } from '@nestjs/jwt';
+import { GetAll } from 'src/common/type';
 @Injectable()
 export class VendorService {
   constructor(private readonly vendorRepository: VendorRepository ,
@@ -49,9 +50,11 @@ export class VendorService {
   }
 
   // Get all vendors
-  async getAllVendors(): Promise<GetAllResponse<Vendor>>{
+  async getAllVendors(page : number = 1 , limit : number = 3): Promise<GetAllResponse<Vendor>>{
+    // define the pagination number
+    const params : GetAll = { page , limit , paginate : true}
     // get all data
-    const vendors = await this.vendorRepository.getAll({});
+    const vendors = await this.vendorRepository.getAll({},params);
     // check if empty array
     if(vendors.length == 0 ) throw new NotFoundException("there is no vendors")
       // send response
