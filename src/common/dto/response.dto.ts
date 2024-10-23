@@ -14,6 +14,14 @@ export class GetAllResponse<T> {
   success : boolean
   data : T[]
 }
+
+export class GetAllWithPagination<T> {
+  success : boolean
+  data : T[];
+  currentPage?: number;  
+  numberOfPages?: number;  
+  numberOfRecords?: number;  
+}
 export class DeleteResponse {
   success : boolean
 }
