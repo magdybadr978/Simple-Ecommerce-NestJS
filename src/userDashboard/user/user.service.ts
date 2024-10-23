@@ -4,10 +4,11 @@ import { BadRequestException, ForbiddenException, HttpException, Injectable, Not
 import { JwtService } from "@nestjs/jwt";
 import * as bcrypt from "bcryptjs";
 import { Types } from "mongoose";
-import { CreateResponse, DeleteResponse, GetAllResponse, GetOneResponse, UpdateResponse } from "src/common/dto/response.dto";
+import { CreateResponse, DeleteResponse, GetAllResponse, GetAllWithPagination, GetOneResponse, UpdateResponse } from "src/common/dto/response.dto";
 import { UserRepository } from "src/models/user/user.repository";
 import { User, UserDocument } from "src/models/user/user.schema";
 import { CreateUserDTO, SignInDTO, UpdateUserDTO } from "./dto";
+import { GetAll } from "src/common/type";
 @Injectable()
 export class UserService {
   constructor(private readonly userRepository : UserRepository , private readonly jwtService : JwtService) {}
@@ -43,9 +44,11 @@ export class UserService {
     }
   
     // Get all Users
-    async getAllUsers(): Promise<GetAllResponse<User>> {
+    async getAllUsers(page : number = 1 , limit : number = 3): Promise<GetAllResponse<User>> {
+      // define the pagination number
+      const params : GetAll = { page , limit , paginate : true}
       // use method getAll
-      const users = await this.userRepository.getAll({});
+      const users = await this.userRepository.getAll({}, params);
       // failed
       if(users.length == 0) throw new NotFoundException("not found users")
       return {success : true , data : users}
